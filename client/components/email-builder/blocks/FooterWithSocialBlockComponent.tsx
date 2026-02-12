@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import React from "react";
+import { Copy, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { FooterWithSocialBlock } from "../types";
 import { SocialBlockComponent } from "./SocialBlockComponent";
 
@@ -10,6 +13,9 @@ interface FooterWithSocialBlockComponentProps {
   onSocialUpdate: (social: any) => void;
   onElementSelect?: (element: string) => void;
   onBlockSelect?: (blockId: string) => void;
+  onDuplicate?: (block: FooterWithSocialBlock, position: number) => void;
+  onDelete?: (blockId: string) => void;
+  blockIndex?: number;
 }
 
 export const FooterWithSocialBlockComponent: React.FC<
@@ -22,7 +28,13 @@ export const FooterWithSocialBlockComponent: React.FC<
   onSocialUpdate,
   onElementSelect,
   onBlockSelect,
+  onDuplicate,
+  onDelete,
+  blockIndex = 0,
 }) => {
+  const [hoveredSection, setHoveredSection] = React.useState<string | null>(null);
+  const [selectedSection, setSelectedSection] = React.useState<string | null>(null);
+
   const handleFieldChange = (
     field: keyof typeof block,
     subField: string,
@@ -42,6 +54,7 @@ export const FooterWithSocialBlockComponent: React.FC<
       onBlockSelect(block.id);
     }
     onElementSelect?.(element);
+    setSelectedSection(element);
   };
 
   return (
