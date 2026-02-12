@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StatsBlock } from "../types";
 import { Copy, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,28 @@ export const StatsBlockComponent: React.FC<StatsBlockComponentProps> = ({
   const [editMode, setEditMode] = useState<string | null>(null);
   const [hoveredFieldId, setHoveredFieldId] = useState<string | null>(null);
   const [focusedFieldId, setFocusedFieldId] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setFocusedFieldId(null);
+        setEditMode(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isSelected) {
+      setFocusedFieldId(null);
+      setEditMode(null);
+    }
+  }, [isSelected]);
 
   const handleUpdateValue = (statId: string, valueId: string, content: string) => {
     const updatedStats = block.stats.map((s) => {
@@ -158,6 +180,7 @@ export const StatsBlockComponent: React.FC<StatsBlockComponentProps> = ({
 
   return (
     <div
+      ref={containerRef}
       style={containerStyle}
       className={`rounded-lg transition-all group relative ${
         isSelected ? "ring-2 ring-valasys-orange" : ""

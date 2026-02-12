@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PromoBlock, ContentBlock } from "../types";
 import { Plus, Copy, Trash2, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,28 @@ export const PromoBlockComponent: React.FC<PromoBlockComponentProps> = ({
   const [editMode, setEditMode] = useState<string | null>(null);
   const [hoveredFieldId, setHoveredFieldId] = useState<string | null>(null);
   const [focusedFieldId, setFocusedFieldId] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setFocusedFieldId(null);
+        setEditMode(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isSelected) {
+      setFocusedFieldId(null);
+      setEditMode(null);
+    }
+  }, [isSelected]);
 
   const texts = React.useMemo(
     () =>
@@ -163,6 +185,7 @@ export const PromoBlockComponent: React.FC<PromoBlockComponentProps> = ({
 
   return (
     <div
+      ref={containerRef}
       style={containerStyle}
       className={`transition-all group relative ${
         isSelected ? "ring-2 ring-valasys-orange" : ""
