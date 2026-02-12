@@ -47,13 +47,16 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
     >
       {/* Header Main Row - Logo and Links */}
       <div
-        className="flex items-center justify-between gap-4 mb-2"
+        className="flex items-center justify-between gap-6"
         style={{
-          textAlign: block.alignment as any,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         {/* Logo */}
-        <div className="flex-shrink-0">
+        <div style={{ flexShrink: 0 }}>
           {block.logo ? (
             <img
               src={block.logo}
@@ -62,13 +65,14 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
                 width: `${block.logoWidth}px`,
                 height: `${block.logoHeight}px`,
                 objectFit: "contain",
+                display: "block",
               }}
             />
           ) : (
-            <label className="flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded p-2 border-2 border-dashed border-gray-300">
+            <label className="flex items-center justify-center cursor-pointer hover:bg-gray-100 rounded p-3 border-2 border-dashed border-gray-300" style={{ width: `${block.logoWidth}px`, height: `${block.logoHeight}px` }}>
               <div className="flex flex-col items-center">
                 <Upload className="w-4 h-4 text-gray-400 mb-1" />
-                <p className="text-xs text-gray-500">Logo</p>
+                <p className="text-xs text-gray-500">Logo Image</p>
               </div>
               <input
                 type="file"
@@ -81,7 +85,7 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
         </div>
 
         {/* Links */}
-        <div className="flex-shrink-0 flex gap-2 items-center ml-auto">
+        <div style={{ flexShrink: 0, display: "flex", gap: "8px", alignItems: "center", marginLeft: "auto" }}>
           {block.links.length > 0 ? (
             block.links.map((link, index) => (
               <React.Fragment key={link.id}>
@@ -92,6 +96,7 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
                     color: block.linksFontColor,
                     textDecoration: "none",
                     cursor: "pointer",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {link.text}
@@ -109,34 +114,27 @@ export const HeaderBlockComponent: React.FC<HeaderBlockComponentProps> = ({
               }}
               className="text-xs"
             >
-              No links (add in Settings)
+              No links
             </span>
           )}
         </div>
       </div>
 
       {/* Company Name - Below Logo and Links */}
-      <div style={{ textAlign: block.alignment as any }}>
-        <span
-          style={{
-            fontSize: `${block.companyFontSize}px`,
-            color: block.companyFontColor,
-            fontWeight: block.companyFontWeight,
-            display: "block",
-            position: "relative",
-          }}
-        >
-          {block.companyName || "Company Name"}
-          {!block.companyName && (
-            <span
-              className="text-xs text-gray-400"
-              style={{ fontSize: "12px", fontWeight: "normal" }}
-            >
-              (Edit in Settings)
-            </span>
-          )}
-        </span>
-      </div>
+      {block.companyName && (
+        <div style={{ textAlign: block.alignment as any, marginTop: "12px" }}>
+          <span
+            style={{
+              fontSize: `${block.companyFontSize}px`,
+              color: block.companyFontColor,
+              fontWeight: block.companyFontWeight,
+              display: "block",
+            }}
+          >
+            {block.companyName}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
