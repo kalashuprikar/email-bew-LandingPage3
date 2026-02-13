@@ -60,26 +60,9 @@ export const FooterWithSocialBlockComponent: React.FC<
 
   const handleCopySection = (sectionType: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    try {
-      let textToCopy = "";
-
-      // Extract the actual content based on section type
-      if (sectionType === "social") {
-        textToCopy = block.social.platforms.map(p => p.name).join(", ");
-      } else if (sectionType === "enterpriseName") {
-        textToCopy = block.enterpriseName.content;
-      } else if (sectionType === "address") {
-        textToCopy = block.address.content;
-      } else if (sectionType === "subscriptionText") {
-        textToCopy = block.subscriptionText.content;
-      } else if (sectionType === "unsubscribeLink") {
-        textToCopy = block.unsubscribeLink.text;
-      }
-
-      // Copy to clipboard silently
-      navigator.clipboard.writeText(textToCopy);
-    } catch (err) {
-      console.error("Failed to copy:", err);
+    // Duplicate the entire footer block with the same content
+    if (onDuplicate) {
+      onDuplicate(block, (blockIndex || 0) + 1);
     }
   };
 
