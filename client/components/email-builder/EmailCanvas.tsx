@@ -3,9 +3,8 @@ import { useDrop } from "react-dnd";
 import { Mail, Copy, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { EmailTemplate, ContentBlock, EmailSection } from "./types";
+import { EmailTemplate, ContentBlock } from "./types";
 import { DraggableBlock } from "./DraggableBlock";
-import { SectionsRenderer } from "./SectionsRenderer";
 
 interface EmailCanvasProps {
   template: EmailTemplate;
@@ -23,15 +22,6 @@ interface EmailCanvasProps {
   onMoveBlock: (dragIndex: number, hoverIndex: number) => void;
   onDuplicateBlock?: (block: ContentBlock, position: number) => void;
   onDeleteBlock?: (blockId: string) => void;
-  // Section-related props
-  onAddSection?: () => void;
-  onDeleteSection?: (sectionId: string) => void;
-  onSectionUpdate?: (section: EmailSection) => void;
-  onBlockDropInSection?: (block: ContentBlock, sectionId: string, position?: number) => void;
-  onBlockUpdateInSection?: (block: ContentBlock, sectionId: string) => void;
-  onBlockDeleteInSection?: (blockId: string, sectionId: string) => void;
-  onMoveBlockWithinSection?: (blockIndex: number, hoverIndex: number, sectionId: string) => void;
-  onDuplicateBlockInSection?: (block: ContentBlock, sectionId: string, position: number) => void;
 }
 
 export const EmailCanvas: React.FC<EmailCanvasProps> = ({
@@ -50,14 +40,6 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   onMoveBlock,
   onDuplicateBlock,
   onDeleteBlock,
-  onAddSection,
-  onDeleteSection,
-  onSectionUpdate,
-  onBlockDropInSection,
-  onBlockUpdateInSection,
-  onBlockDeleteInSection,
-  onMoveBlockWithinSection,
-  onDuplicateBlockInSection,
 }) => {
   const [hoveredInlineGroup, setHoveredInlineGroup] = useState<string | null>(null);
   const [selectedInlineGroup, setSelectedInlineGroup] = useState<string | null>(null);
@@ -143,7 +125,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
             padding: `${template.padding}px`,
           }}
           className={cn(
-            "bg-white border border-t-0 border-gray-200 rounded-b-lg shadow-sm min-h-96 transition-all overflow-y-auto p-6",
+            "bg-white border border-t-0 border-gray-200 rounded-b-lg shadow-sm min-h-96 transition-all",
             isOver && "ring-2 ring-valasys-orange bg-orange-50",
           )}
           onClick={(e) => {
@@ -153,26 +135,7 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
             }
           }}
         >
-          {/* Section-based rendering */}
-          {Array.isArray(template.sections) && template.sections.length > 0 ? (
-            <SectionsRenderer
-              template={template}
-              selectedBlockId={selectedBlockId}
-              editingBlockId={editingBlockId}
-              selectedFooterElement={selectedFooterElement}
-              onBlockUpdate={onBlockUpdate}
-              onBlockSelect={onBlockSelect}
-              onEditingBlockChange={onEditingBlockChange}
-              onFooterElementSelect={onFooterElementSelect}
-              onBlockDrop={onBlockDropInSection || (() => {})}
-              onMoveBlockWithinSection={onMoveBlockWithinSection || (() => {})}
-              onDuplicateBlock={onDuplicateBlockInSection || (() => {})}
-              onDeleteBlock={onBlockDeleteInSection || (() => {})}
-              onDeleteSection={onDeleteSection || (() => {})}
-              onSectionUpdate={onSectionUpdate || (() => {})}
-              onAddSection={onAddSection || (() => {})}
-            />
-          ) : template.blocks.length === 0 ? (
+          {template.blocks.length === 0 ? (
             <div className="text-center py-16 text-gray-400">
               <div className="flex justify-center mb-4">
                 <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
