@@ -30,7 +30,7 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`bg-white border-2 border-gray-200 cursor-pointer transition-all ${
+      className={`bg-white border border-gray-200 cursor-pointer transition-all ${
         isSelected ? "border-valasys-orange" : "hover:border-gray-300"
       }`}
     >
@@ -86,7 +86,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{
@@ -134,7 +134,7 @@ export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -175,7 +175,7 @@ export const TestimonialsBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -214,7 +214,7 @@ export const AboutBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -257,7 +257,7 @@ export const ContactFormBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -320,7 +320,7 @@ export const FooterBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{
@@ -414,7 +414,7 @@ export const PricingBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -476,7 +476,7 @@ export const FaqBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -515,7 +515,7 @@ export const SignupBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
@@ -555,7 +555,7 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`cursor-pointer transition-all border-2 ${
+      className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{ backgroundColor: props.backgroundColor }}
