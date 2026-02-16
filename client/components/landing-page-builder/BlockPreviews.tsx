@@ -174,8 +174,76 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
   block,
   isSelected,
   onSelect,
+  onUpdate,
 }) => {
   const props = block.properties;
+  const [selectedElement, setSelectedElement] = React.useState<"heading" | "subheading" | "button" | null>(null);
+  const [hoveredElement, setHoveredElement] = React.useState<"heading" | "subheading" | "button" | null>(null);
+  const [isEditingHeading, setIsEditingHeading] = React.useState(false);
+  const [editHeadingText, setEditHeadingText] = React.useState(props.headline || "");
+  const [isEditingSubheading, setIsEditingSubheading] = React.useState(false);
+  const [editSubheadingText, setEditSubheadingText] = React.useState(props.subheading || "");
+  const [isEditingButton, setIsEditingButton] = React.useState(false);
+  const [editButtonText, setEditButtonText] = React.useState(props.ctaButtonText || "");
+
+  const handleHeadlineSave = () => {
+    if (editHeadingText.trim()) {
+      onUpdate?.({ ...props, headline: editHeadingText });
+    }
+    setIsEditingHeading(false);
+  };
+
+  const handleSubheadingSave = () => {
+    if (editSubheadingText.trim()) {
+      onUpdate?.({ ...props, subheading: editSubheadingText });
+    }
+    setIsEditingSubheading(false);
+  };
+
+  const handleButtonSave = () => {
+    if (editButtonText.trim()) {
+      onUpdate?.({ ...props, ctaButtonText: editButtonText });
+    }
+    setIsEditingButton(false);
+  };
+
+  const handleCopyHeading = () => {
+    onUpdate?.({ ...props, headline: props.headline + " (Copy)" });
+  };
+
+  const handleDeleteHeading = () => {
+    onUpdate?.({ ...props, headline: "" });
+    setSelectedElement(null);
+  };
+
+  const handleCopySubheading = () => {
+    onUpdate?.({ ...props, subheading: props.subheading + " (Copy)" });
+  };
+
+  const handleDeleteSubheading = () => {
+    onUpdate?.({ ...props, subheading: "" });
+    setSelectedElement(null);
+  };
+
+  const handleCopyButton = () => {
+    onUpdate?.({ ...props, ctaButtonText: props.ctaButtonText + " (Copy)" });
+  };
+
+  const handleDeleteButton = () => {
+    onUpdate?.({ ...props, ctaButtonText: "" });
+    setSelectedElement(null);
+  };
+
+  const getElementBorderClass = (element: "heading" | "subheading" | "button") => {
+    if (selectedElement === element) {
+      return "border-2 border-solid border-valasys-orange";
+    }
+    if (hoveredElement === element) {
+      return "border-2 border-dashed border-valasys-orange";
+    }
+    return "";
+  };
+
   return (
     <div
       onClick={onSelect}
@@ -189,31 +257,217 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
       }}
     >
       <div className="flex flex-col items-center justify-center h-full px-4 md:px-8 py-8 md:py-16 text-center">
-        <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
-          {props.headline}
-        </h1>
-        <p className="text-sm md:text-xl text-gray-600 mb-8 max-w-2xl">
-          {props.subheading}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-          <button
-            style={{ backgroundColor: props.ctaButtonColor }}
-            className="px-6 md:px-8 py-2 md:py-3 text-white font-medium rounded hover:opacity-90 transition-opacity text-sm md:text-base"
-          >
-            {props.ctaButtonText}
-          </button>
-          {props.secondaryButtonText && (
-            <button
-              style={{
-                backgroundColor: props.secondaryButtonColor,
-                color: props.secondaryButtonTextColor,
+        {/* Heading */}
+        <div
+          className={`relative mb-4 px-4 py-2 rounded transition-all ${getElementBorderClass("heading")}`}
+          onMouseEnter={() => setHoveredElement("heading")}
+          onMouseLeave={() => setHoveredElement(null)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedElement("heading");
+          }}
+        >
+          {isEditingHeading ? (
+            <input
+              type="text"
+              value={editHeadingText}
+              onChange={(e) => setEditHeadingText(e.target.value)}
+              onBlur={handleHeadlineSave}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleHeadlineSave();
+                if (e.key === "Escape") {
+                  setEditHeadingText(props.headline || "");
+                  setIsEditingHeading(false);
+                }
               }}
-              className="px-6 md:px-8 py-2 md:py-3 font-medium rounded hover:opacity-90 transition-opacity border border-gray-300 text-sm md:text-base"
+              onClick={(e) => e.stopPropagation()}
+              className="w-full text-2xl md:text-5xl font-bold text-gray-900 border border-valasys-orange rounded px-2 py-1 focus:outline-none"
+              autoFocus
+            />
+          ) : (
+            <h1
+              className="text-2xl md:text-5xl font-bold text-gray-900 cursor-text"
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                setEditHeadingText(props.headline || "");
+                setIsEditingHeading(true);
+              }}
             >
-              {props.secondaryButtonText}
-            </button>
+              {props.headline}
+            </h1>
+          )}
+
+          {selectedElement === "heading" && !isEditingHeading && (
+            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg shadow-xl border border-valasys-orange p-2 z-50 mt-2">
+              <button
+                className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
+                title="Copy heading"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCopyHeading();
+                }}
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+              <button
+                className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
+                title="Delete heading"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteHeading();
+                }}
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
           )}
         </div>
+
+        {/* Subheading */}
+        <div
+          className={`relative mb-8 px-4 py-2 rounded transition-all max-w-2xl ${getElementBorderClass("subheading")}`}
+          onMouseEnter={() => setHoveredElement("subheading")}
+          onMouseLeave={() => setHoveredElement(null)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedElement("subheading");
+          }}
+        >
+          {isEditingSubheading ? (
+            <input
+              type="text"
+              value={editSubheadingText}
+              onChange={(e) => setEditSubheadingText(e.target.value)}
+              onBlur={handleSubheadingSave}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubheadingSave();
+                if (e.key === "Escape") {
+                  setEditSubheadingText(props.subheading || "");
+                  setIsEditingSubheading(false);
+                }
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full text-sm md:text-xl text-gray-600 border border-valasys-orange rounded px-2 py-1 focus:outline-none"
+              autoFocus
+            />
+          ) : (
+            <p
+              className="text-sm md:text-xl text-gray-600 cursor-text"
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                setEditSubheadingText(props.subheading || "");
+                setIsEditingSubheading(true);
+              }}
+            >
+              {props.subheading}
+            </p>
+          )}
+
+          {selectedElement === "subheading" && !isEditingSubheading && (
+            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg shadow-xl border border-valasys-orange p-2 z-50 mt-2">
+              <button
+                className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
+                title="Copy subheading"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCopySubheading();
+                }}
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+              <button
+                className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
+                title="Delete subheading"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteSubheading();
+                }}
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* CTA Button */}
+        <div
+          className={`relative px-4 py-2 rounded transition-all ${getElementBorderClass("button")}`}
+          onMouseEnter={() => setHoveredElement("button")}
+          onMouseLeave={() => setHoveredElement(null)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedElement("button");
+          }}
+        >
+          {isEditingButton ? (
+            <input
+              type="text"
+              value={editButtonText}
+              onChange={(e) => setEditButtonText(e.target.value)}
+              onBlur={handleButtonSave}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleButtonSave();
+                if (e.key === "Escape") {
+                  setEditButtonText(props.ctaButtonText || "");
+                  setIsEditingButton(false);
+                }
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="px-6 md:px-8 py-2 md:py-3 border border-valasys-orange rounded focus:outline-none text-sm md:text-base"
+              style={{ backgroundColor: props.ctaButtonColor || "#FF6A00", color: "white" }}
+              autoFocus
+            />
+          ) : (
+            <button
+              style={{ backgroundColor: props.ctaButtonColor }}
+              className="px-6 md:px-8 py-2 md:py-3 text-white font-medium rounded hover:opacity-90 transition-opacity text-sm md:text-base cursor-text"
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+                setEditButtonText(props.ctaButtonText || "");
+                setIsEditingButton(true);
+              }}
+            >
+              {props.ctaButtonText}
+            </button>
+          )}
+
+          {selectedElement === "button" && !isEditingButton && (
+            <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white rounded-lg shadow-xl border border-valasys-orange p-2 z-50 mt-2">
+              <button
+                className="h-8 w-8 p-0 hover:bg-orange-50 hover:text-valasys-orange transition-colors flex items-center justify-center rounded"
+                title="Copy button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCopyButton();
+                }}
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+              <button
+                className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 transition-colors flex items-center justify-center rounded"
+                title="Delete button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteButton();
+                }}
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {props.secondaryButtonText && (
+          <button
+            style={{
+              backgroundColor: props.secondaryButtonColor,
+              color: props.secondaryButtonTextColor,
+            }}
+            className="px-6 md:px-8 py-2 md:py-3 font-medium rounded hover:opacity-90 transition-opacity border border-gray-300 text-sm md:text-base mt-3"
+          >
+            {props.secondaryButtonText}
+          </button>
+        )}
       </div>
     </div>
   );
