@@ -333,11 +333,24 @@ export const LandingPageSettingsPanel: React.FC<
         <Label className="text-sm font-medium">Width</Label>
         <div className="flex gap-2">
           <Input
-            type="number"
+            type="text"
             value={parseInt(localProps.width) || 100}
             onChange={(e) => {
               const unit = (localProps.width || "100%").includes("%") ? "%" : "px";
-              const num = parseInt(e.target.value) || 0;
+              const inputValue = e.target.value;
+
+              // Allow empty string for backspace
+              if (inputValue === "") {
+                updateProperty("width", `0${unit}`);
+                return;
+              }
+
+              // Only accept numbers
+              if (!/^\d+$/.test(inputValue)) {
+                return;
+              }
+
+              const num = parseInt(inputValue);
 
               // For percentage: only allow up to 100
               if (unit === "%") {
@@ -379,11 +392,23 @@ export const LandingPageSettingsPanel: React.FC<
         <Label className="text-sm font-medium">Min Height</Label>
         <div className="flex gap-2">
           <Input
-            type="number"
+            type="text"
             value={parseInt(localProps.minHeight) || 500}
             onChange={(e) => {
-              const num = e.target.value;
-              updateProperty("minHeight", `${num}px`);
+              const inputValue = e.target.value;
+
+              // Allow empty string for backspace
+              if (inputValue === "") {
+                updateProperty("minHeight", `0px`);
+                return;
+              }
+
+              // Only accept numbers
+              if (!/^\d+$/.test(inputValue)) {
+                return;
+              }
+
+              updateProperty("minHeight", `${inputValue}px`);
             }}
             placeholder="500"
             className="flex-1"
