@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useDrop } from "react-dnd";
 import { cn } from "@/lib/utils";
 import { ContentBlock } from "./types";
@@ -10,7 +10,7 @@ interface DropZoneProps {
   isEmpty?: boolean;
 }
 
-export const DropZone: React.FC<DropZoneProps> = ({
+const DropZoneComponent: React.FC<DropZoneProps> = ({
   position,
   onBlockDrop,
   isEmpty = false,
@@ -19,9 +19,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
     () => ({
       accept: "block",
       drop: (item: any, monitor) => {
-        console.log("DropZone drop detected at position:", position, "item:", item);
         if (item && item.block) {
-          console.log("Calling onBlockDrop with block type:", item.block.type);
           onBlockDrop(item.block, position);
           return { handled: true };
         }
@@ -67,15 +65,26 @@ export const DropZone: React.FC<DropZoneProps> = ({
     <div
       ref={drop}
       className={cn(
-        "w-full transition-all duration-150 rounded",
-        isOver && canDrop
-          ? "bg-valasys-orange h-8 my-1"
-          : "h-1 my-3 bg-gray-300 hover:bg-orange-400 hover:h-2"
+        "w-full transition-all rounded-md my-2 pointer-events-auto"
       )}
       style={{
-        minHeight: isOver && canDrop ? "32px" : "4px",
-        cursor: canDrop ? "grab" : "default",
+        minHeight: "32px",
+        cursor: "grab",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: isOver && canDrop ? "rgba(255, 106, 0, 0.2)" : "rgba(0, 0, 0, 0.02)",
+        border: isOver && canDrop ? "2px solid rgb(255, 106, 0)" : "2px dashed rgb(200, 200, 200)",
       }}
-    />
+    >
+      <span className={cn(
+        "text-xs font-medium transition-all",
+        isOver && canDrop ? "text-valasys-orange opacity-100" : "text-gray-400 opacity-60"
+      )}>
+        {isOver && canDrop ? "📥 Drop here to add block" : "Drop zone"}
+      </span>
+    </div>
   );
 };
+
+export const DropZone = memo(DropZoneComponent);

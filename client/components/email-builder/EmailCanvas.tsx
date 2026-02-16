@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useDrop } from "react-dnd";
 import { Mail, Copy, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -47,14 +47,17 @@ export const EmailCanvas: React.FC<EmailCanvasProps> = ({
   const [selectedInlineGroup, setSelectedInlineGroup] = useState<string | null>(null);
 
   // Wrapper for onAddBlock to provide feedback
-  const handleAddBlockWithFeedback = (block: ContentBlock, position?: number) => {
-    console.log("handleAddBlockWithFeedback called:", { blockType: block.type, blockId: block.id, position });
-    const blockType = (block as any).type || "block";
-    toast.success(`Added ${blockType} block`, {
-      duration: 2000,
-    });
-    onAddBlock(block, position);
-  };
+  const handleAddBlockWithFeedback = useCallback(
+    (block: ContentBlock, position?: number) => {
+      console.log("Drop detected - position:", position, "block type:", block.type);
+      const blockType = (block as any).type || "block";
+      toast.success(`Added ${blockType} block`, {
+        duration: 2000,
+      });
+      onAddBlock(block, position);
+    },
+    [onAddBlock]
+  );
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ["template"],
