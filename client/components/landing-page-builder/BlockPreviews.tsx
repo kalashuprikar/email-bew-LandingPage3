@@ -246,7 +246,9 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
 
   return (
     <div
-      onClick={onSelect}
+      onClick={(e) => {
+        onSelect();
+      }}
       className={`cursor-pointer transition-all border ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
@@ -264,6 +266,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
           onMouseLeave={() => setHoveredElement(null)}
           onClick={(e) => {
             e.stopPropagation();
+            onSelect();
             setSelectedElement("heading");
           }}
         >
@@ -330,6 +333,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
           onMouseLeave={() => setHoveredElement(null)}
           onClick={(e) => {
             e.stopPropagation();
+            onSelect();
             setSelectedElement("subheading");
           }}
         >
@@ -396,6 +400,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
           onMouseLeave={() => setHoveredElement(null)}
           onClick={(e) => {
             e.stopPropagation();
+            onSelect();
             setSelectedElement("button");
           }}
         >
