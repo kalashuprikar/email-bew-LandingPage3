@@ -107,7 +107,7 @@ export const LandingPageSettingsPanel: React.FC<
                     <div className="flex gap-2">
                       <Input
                         type="text"
-                        value={localProps.headlineWidth || "100%"}
+                        value={localProps.headlineWidth ?? "100%"}
                         onChange={(e) => updateProperty("headlineWidth", e.target.value)}
                         placeholder="100%, 500px, etc."
                         className="flex-1"
@@ -127,7 +127,7 @@ export const LandingPageSettingsPanel: React.FC<
                     <div className="flex gap-2">
                       <Input
                         type="text"
-                        value={localProps.headlineHeight || "auto"}
+                        value={localProps.headlineHeight ?? "auto"}
                         onChange={(e) => updateProperty("headlineHeight", e.target.value)}
                         placeholder="auto, 200px, etc."
                         className="flex-1"
@@ -181,7 +181,7 @@ export const LandingPageSettingsPanel: React.FC<
                     <div className="flex gap-2">
                       <Input
                         type="text"
-                        value={localProps.subheadingWidth || "100%"}
+                        value={localProps.subheadingWidth ?? "100%"}
                         onChange={(e) => updateProperty("subheadingWidth", e.target.value)}
                         placeholder="100%, 500px, etc."
                         className="flex-1"
@@ -201,7 +201,7 @@ export const LandingPageSettingsPanel: React.FC<
                     <div className="flex gap-2">
                       <Input
                         type="text"
-                        value={localProps.subheadingHeight || "auto"}
+                        value={localProps.subheadingHeight ?? "auto"}
                         onChange={(e) => updateProperty("subheadingHeight", e.target.value)}
                         placeholder="auto, 100px, etc."
                         className="flex-1"
