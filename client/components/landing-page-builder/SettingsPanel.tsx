@@ -16,6 +16,30 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onBlockUpdate,
   onBlockDelete,
 }) => {
+  const handleSizeKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    key: string,
+    currentValue: string
+  ) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      e.preventDefault();
+      const value = currentValue || "0px";
+      const match = value.match(/^(\d+(?:\.\d+)?)(.*)/);
+
+      if (match) {
+        const num = parseFloat(match[1]);
+        const unit = match[2] || "px";
+        const step = unit === "%" ? 5 : 10;
+        const newNum = e.key === "ArrowUp" ? num + step : Math.max(0, num - step);
+        const newValue = `${newNum}${unit}`;
+        onBlockUpdate({
+          ...block,
+          properties: { ...block.properties, [key]: newValue },
+        });
+      }
+    }
+  };
+
   if (!block) {
     return (
       <div className="bg-white border-l border-gray-200 p-4 h-full flex items-center justify-center">
@@ -312,6 +336,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       properties: { ...props, headlineWidth: e.target.value },
                     })
                   }
+                  onKeyDown={(e) => handleSizeKeyDown(e, "headlineWidth", props.headlineWidth ?? "100%")}
                   className="focus:ring-valasys-orange focus:ring-2"
                 />
               </div>
@@ -329,6 +354,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       properties: { ...props, headlineHeight: e.target.value },
                     })
                   }
+                  onKeyDown={(e) => handleSizeKeyDown(e, "headlineHeight", props.headlineHeight ?? "auto")}
                   className="focus:ring-valasys-orange focus:ring-2"
                 />
               </div>
@@ -349,6 +375,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       properties: { ...props, subheadingWidth: e.target.value },
                     })
                   }
+                  onKeyDown={(e) => handleSizeKeyDown(e, "subheadingWidth", props.subheadingWidth ?? "100%")}
                   className="focus:ring-valasys-orange focus:ring-2"
                 />
               </div>
@@ -366,6 +393,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       properties: { ...props, subheadingHeight: e.target.value },
                     })
                   }
+                  onKeyDown={(e) => handleSizeKeyDown(e, "subheadingHeight", props.subheadingHeight ?? "auto")}
                   className="focus:ring-valasys-orange focus:ring-2"
                 />
               </div>

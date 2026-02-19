@@ -47,6 +47,26 @@ export const LandingPageSettingsPanel: React.FC<
     }
   };
 
+  const handleSizeKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    key: string,
+    currentValue: string
+  ) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+      e.preventDefault();
+      const value = currentValue || "0px";
+      const match = value.match(/^(\d+(?:\.\d+)?)(.*)/);
+
+      if (match) {
+        const num = parseFloat(match[1]);
+        const unit = match[2] || "px";
+        const step = unit === "%" ? 5 : 10;
+        const newNum = e.key === "ArrowUp" ? num + step : Math.max(0, num - step);
+        updateProperty(key, `${newNum}${unit}`);
+      }
+    }
+  };
+
   // Show element-specific styling UI if an element is selected
   if (selectedElement && block && block.type === "hero") {
     const elementLabels = {
@@ -109,6 +129,7 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={localProps.headlineWidth ?? "100%"}
                         onChange={(e) => updateProperty("headlineWidth", e.target.value)}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "headlineWidth", localProps.headlineWidth ?? "100%")}
                         placeholder="100%, 500px, etc."
                         className="flex-1"
                       />
@@ -129,6 +150,7 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={localProps.headlineHeight ?? "auto"}
                         onChange={(e) => updateProperty("headlineHeight", e.target.value)}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "headlineHeight", localProps.headlineHeight ?? "auto")}
                         placeholder="auto, 200px, etc."
                         className="flex-1"
                       />
@@ -183,6 +205,7 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={localProps.subheadingWidth ?? "100%"}
                         onChange={(e) => updateProperty("subheadingWidth", e.target.value)}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "subheadingWidth", localProps.subheadingWidth ?? "100%")}
                         placeholder="100%, 500px, etc."
                         className="flex-1"
                       />
@@ -203,6 +226,7 @@ export const LandingPageSettingsPanel: React.FC<
                         type="text"
                         value={localProps.subheadingHeight ?? "auto"}
                         onChange={(e) => updateProperty("subheadingHeight", e.target.value)}
+                        onKeyDown={(e) => handleSizeKeyDown(e, "subheadingHeight", localProps.subheadingHeight ?? "auto")}
                         placeholder="auto, 100px, etc."
                         className="flex-1"
                       />

@@ -321,8 +321,8 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             onClick={(e) => e.stopPropagation()}
             className="text-2xl md:text-5xl font-bold text-gray-900 px-2 py-1 focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
             style={{
-              width: props.headlineWidth || "100%",
-              height: props.headlineHeight || "auto",
+              width: props.headlineWidth ?? "100%",
+              height: props.headlineHeight ?? "auto",
             }}
             autoFocus
             onFocus={(e) => {
@@ -335,8 +335,8 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             style={{
               color: props.headlineColor || "#1f2937",
               wordBreak: "break-word",
-              width: props.headlineWidth || "100%",
-              height: props.headlineHeight || "auto",
+              width: props.headlineWidth ?? "100%",
+              height: props.headlineHeight ?? "auto",
             }}
             onDoubleClick={(e) => {
               e.stopPropagation();
@@ -413,8 +413,8 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             onClick={(e) => e.stopPropagation()}
             className="text-sm md:text-xl text-gray-600 px-2 py-1 focus:outline-none bg-transparent resize-none overflow-hidden whitespace-pre-wrap break-words"
             style={{
-              width: props.subheadingWidth || "100%",
-              height: props.subheadingHeight || "auto",
+              width: props.subheadingWidth ?? "100%",
+              height: props.subheadingHeight ?? "auto",
             }}
             autoFocus
             onFocus={(e) => {
@@ -427,8 +427,8 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
             style={{
               color: props.subheadingColor || "#4b5563",
               wordBreak: "break-word",
-              width: props.subheadingWidth || "100%",
-              height: props.subheadingHeight || "auto",
+              width: props.subheadingWidth ?? "100%",
+              height: props.subheadingHeight ?? "auto",
             }}
             onDoubleClick={(e) => {
               e.stopPropagation();
