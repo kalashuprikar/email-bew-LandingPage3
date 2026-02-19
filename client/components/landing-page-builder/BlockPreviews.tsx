@@ -480,7 +480,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
 
     return (
       <div
-        className={`relative px-4 py-2 rounded transition-all cursor-move group ${
+        className={`relative w-full px-4 py-2 rounded transition-all cursor-move group ${
           selectedElement === "button" ? "border-2 border-solid border-valasys-orange" :
           hoveredElement === "button" ? "border-2 border-dashed border-valasys-orange" : ""
         }`}
