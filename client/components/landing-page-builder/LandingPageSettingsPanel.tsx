@@ -67,6 +67,16 @@ export const LandingPageSettingsPanel: React.FC<
     }
   };
 
+  const toggleUnit = (key: string, currentValue: string, fromUnit: string, toUnit: string) => {
+    const match = currentValue.match(/^(\d+(?:\.\d+)?)(.*)/);
+    if (match) {
+      const num = parseFloat(match[1]);
+      updateProperty(key, `${num}${toUnit}`);
+    } else {
+      updateProperty(key, `100${toUnit}`);
+    }
+  };
+
   // Show element-specific styling UI if an element is selected
   if (selectedElement && block && block.type === "hero") {
     const elementLabels = {
@@ -136,6 +146,18 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={() => {
+                          const current = localProps.headlineWidth ?? "100%";
+                          const hasPercent = current.includes("%");
+                          toggleUnit("headlineWidth", current, hasPercent ? "%" : "px", hasPercent ? "px" : "%");
+                        }}
+                        className="px-2 text-xs"
+                      >
+                        {(localProps.headlineWidth ?? "100%").includes("%") ? "px" : "%"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => updateProperty("headlineWidth", "100%")}
                         className="px-3"
                       >
@@ -154,6 +176,22 @@ export const LandingPageSettingsPanel: React.FC<
                         placeholder="auto, 200px, etc."
                         className="flex-1"
                       />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const current = localProps.headlineHeight ?? "auto";
+                          if (current === "auto") {
+                            updateProperty("headlineHeight", "100px");
+                          } else {
+                            const hasPercent = current.includes("%");
+                            toggleUnit("headlineHeight", current, hasPercent ? "%" : "px", hasPercent ? "px" : "%");
+                          }
+                        }}
+                        className="px-2 text-xs"
+                      >
+                        {(localProps.headlineHeight ?? "auto") === "auto" ? "px/%" : (localProps.headlineHeight ?? "auto").includes("%") ? "px" : "%"}
+                      </Button>
                       <Button
                         variant="outline"
                         size="sm"
@@ -212,6 +250,18 @@ export const LandingPageSettingsPanel: React.FC<
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={() => {
+                          const current = localProps.subheadingWidth ?? "100%";
+                          const hasPercent = current.includes("%");
+                          toggleUnit("subheadingWidth", current, hasPercent ? "%" : "px", hasPercent ? "px" : "%");
+                        }}
+                        className="px-2 text-xs"
+                      >
+                        {(localProps.subheadingWidth ?? "100%").includes("%") ? "px" : "%"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => updateProperty("subheadingWidth", "100%")}
                         className="px-3"
                       >
@@ -230,6 +280,22 @@ export const LandingPageSettingsPanel: React.FC<
                         placeholder="auto, 100px, etc."
                         className="flex-1"
                       />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const current = localProps.subheadingHeight ?? "auto";
+                          if (current === "auto") {
+                            updateProperty("subheadingHeight", "100px");
+                          } else {
+                            const hasPercent = current.includes("%");
+                            toggleUnit("subheadingHeight", current, hasPercent ? "%" : "px", hasPercent ? "px" : "%");
+                          }
+                        }}
+                        className="px-2 text-xs"
+                      >
+                        {(localProps.subheadingHeight ?? "auto") === "auto" ? "px/%" : (localProps.subheadingHeight ?? "auto").includes("%") ? "px" : "%"}
+                      </Button>
                       <Button
                         variant="outline"
                         size="sm"

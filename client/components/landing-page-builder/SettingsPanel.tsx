@@ -40,6 +40,19 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     }
   };
 
+  const toggleUnit = (key: string, currentValue: string) => {
+    const match = currentValue.match(/^(\d+(?:\.\d+)?)(.*)/);
+    if (match) {
+      const num = parseFloat(match[1]);
+      const unit = match[2] || "px";
+      const newUnit = unit === "%" ? "px" : "%";
+      onBlockUpdate({
+        ...block,
+        properties: { ...block.properties, [key]: `${num}${newUnit}` },
+      });
+    }
+  };
+
   if (!block) {
     return (
       <div className="bg-white border-l border-gray-200 p-4 h-full flex items-center justify-center">
@@ -326,37 +339,67 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 <Label className="text-xs font-semibold text-gray-700 mb-2 block">
                   Headline Width
                 </Label>
-                <Input
-                  type="text"
-                  placeholder="100%, 500px, etc."
-                  value={props.headlineWidth ?? "100%"}
-                  onChange={(e) =>
-                    onBlockUpdate({
-                      ...block,
-                      properties: { ...props, headlineWidth: e.target.value },
-                    })
-                  }
-                  onKeyDown={(e) => handleSizeKeyDown(e, "headlineWidth", props.headlineWidth ?? "100%")}
-                  className="focus:ring-valasys-orange focus:ring-2"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="100%, 500px, etc."
+                    value={props.headlineWidth ?? "100%"}
+                    onChange={(e) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, headlineWidth: e.target.value },
+                      })
+                    }
+                    onKeyDown={(e) => handleSizeKeyDown(e, "headlineWidth", props.headlineWidth ?? "100%")}
+                    className="focus:ring-valasys-orange focus:ring-2 flex-1"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => toggleUnit("headlineWidth", props.headlineWidth ?? "100%")}
+                    className="px-2 text-xs"
+                  >
+                    {(props.headlineWidth ?? "100%").includes("%") ? "px" : "%"}
+                  </Button>
+                </div>
               </div>
               <div className="mt-3">
                 <Label className="text-xs font-semibold text-gray-700 mb-2 block">
                   Headline Height
                 </Label>
-                <Input
-                  type="text"
-                  placeholder="auto, 200px, etc."
-                  value={props.headlineHeight ?? "auto"}
-                  onChange={(e) =>
-                    onBlockUpdate({
-                      ...block,
-                      properties: { ...props, headlineHeight: e.target.value },
-                    })
-                  }
-                  onKeyDown={(e) => handleSizeKeyDown(e, "headlineHeight", props.headlineHeight ?? "auto")}
-                  className="focus:ring-valasys-orange focus:ring-2"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="auto, 200px, etc."
+                    value={props.headlineHeight ?? "auto"}
+                    onChange={(e) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, headlineHeight: e.target.value },
+                      })
+                    }
+                    onKeyDown={(e) => handleSizeKeyDown(e, "headlineHeight", props.headlineHeight ?? "auto")}
+                    className="focus:ring-valasys-orange focus:ring-2 flex-1"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const current = props.headlineHeight ?? "auto";
+                      if (current === "auto") {
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, headlineHeight: "100px" },
+                        });
+                      } else {
+                        toggleUnit("headlineHeight", current);
+                      }
+                    }}
+                    className="px-2 text-xs"
+                  >
+                    {(props.headlineHeight ?? "auto") === "auto" ? "px/%" : (props.headlineHeight ?? "auto").includes("%") ? "px" : "%"}
+                  </Button>
+                </div>
               </div>
             </div>
             <div className="border-t border-gray-200 pt-4 mt-4">
