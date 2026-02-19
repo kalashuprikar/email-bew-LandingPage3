@@ -98,6 +98,29 @@ export const LandingPageSettingsPanel: React.FC<
                     />
                   </div>
                 </div>
+                <div className="border-t border-gray-200 pt-4 mt-4">
+                  <Label className="text-sm font-medium block mb-3">Size & Spacing</Label>
+                  <div>
+                    <Label className="text-xs text-gray-600 mb-1 block">Width</Label>
+                    <Input
+                      type="text"
+                      value={localProps.headlineWidth || "100%"}
+                      onChange={(e) => updateProperty("headlineWidth", e.target.value)}
+                      placeholder="100%, 500px, etc."
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <Label className="text-xs text-gray-600 mb-1 block">Height</Label>
+                    <Input
+                      type="text"
+                      value={localProps.headlineHeight || "auto"}
+                      onChange={(e) => updateProperty("headlineHeight", e.target.value)}
+                      placeholder="auto, 200px, etc."
+                      className="w-full"
+                    />
+                  </div>
+                </div>
               </>
             )}
             {selectedElement === "subheading" && (
@@ -126,6 +149,29 @@ export const LandingPageSettingsPanel: React.FC<
                       onChange={(e) => updateProperty("subheadingColor", e.target.value)}
                       placeholder="#4b5563"
                       className="flex-1"
+                    />
+                  </div>
+                </div>
+                <div className="border-t border-gray-200 pt-4 mt-4">
+                  <Label className="text-sm font-medium block mb-3">Size & Spacing</Label>
+                  <div>
+                    <Label className="text-xs text-gray-600 mb-1 block">Width</Label>
+                    <Input
+                      type="text"
+                      value={localProps.subheadingWidth || "100%"}
+                      onChange={(e) => updateProperty("subheadingWidth", e.target.value)}
+                      placeholder="100%, 500px, etc."
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <Label className="text-xs text-gray-600 mb-1 block">Height</Label>
+                    <Input
+                      type="text"
+                      value={localProps.subheadingHeight || "auto"}
+                      onChange={(e) => updateProperty("subheadingHeight", e.target.value)}
+                      placeholder="auto, 100px, etc."
+                      className="w-full"
                     />
                   </div>
                 </div>
@@ -483,7 +529,8 @@ export const LandingPageSettingsPanel: React.FC<
               const numericOnly = inputValue.replace(/[^0-9]/g, "");
 
               if (numericOnly === "") {
-                return; // Don't save empty values
+                updateProperty("width", "100%"); // Reset to default
+                return;
               }
 
               const num = parseInt(numericOnly, 10);
@@ -535,7 +582,8 @@ export const LandingPageSettingsPanel: React.FC<
               const numericOnly = inputValue.replace(/[^0-9]/g, "");
 
               if (numericOnly === "") {
-                return; // Don't save empty values
+                updateProperty("minHeight", "500px"); // Reset to default
+                return;
               }
 
               updateProperty("minHeight", `${numericOnly}px`);
