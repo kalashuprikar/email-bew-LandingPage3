@@ -2222,9 +2222,7 @@ export const ContentImageBlockPreview: React.FC<BlockPreviewProps> = ({
   return (
     <div
       onClick={onSelect}
-      className={`border cursor-pointer transition-all ${
-        isSelected ? "border-valasys-orange border-2" : "border-gray-200"
-      }`}
+      className="cursor-pointer transition-all"
       style={{ backgroundColor: props.backgroundColor || "#ffffff" }}
     >
       <div className="p-6">
