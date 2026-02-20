@@ -83,15 +83,23 @@ export const SourceCodeView: React.FC<SourceCodeViewProps> = ({ template }) => {
 
   const handleDownloadInlineHTML = () => {
     // Create pure HTML with inline CSS
+    const docBgColor = template.documentBackgroundColor || "#ffffff";
     const inlineHTMLContent = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${template.subject}</title>
+  <style>
+    html, body {
+      background-color: ${docBgColor} !important;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
 </head>
-<body style="background-color: ${template.backgroundColor || "#ffffff"}; padding: ${template.padding || 0}px; font-family: Arial, sans-serif; margin: 0;">
-  <div style="max-width: 600px; margin: 0 auto;">
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: ${docBgColor};">
+  <div style="max-width: 600px; margin: 0 auto; background-color: ${template.backgroundColor}; border: 1px solid #ddd; border-radius: 4px; padding: ${template.padding}px; box-sizing: border-box; overflow: hidden;">
 ${htmlContent.substring(htmlContent.indexOf('<div style="max-width:'), htmlContent.lastIndexOf("</div>") + 6)}
   </div>
 </body>
